@@ -46,13 +46,13 @@ print("Task 3 \n")
 p = 0.9
 V = 100000
 
-# Client B (seller)
+# Client B - seller
 a_B, s_B = 0.14, 200
 
 EU_B = p * a_B * np.log(V / s_B + 1)
 CE_B = s_B * (np.exp(EU_B / a_B) - 1)
 
-# Client C (buyer)
+# Client C - buyer
 a_C, s_C = 1.43, 100000
 
 EU_C = p * a_C * np.log(V / s_C + 1)
