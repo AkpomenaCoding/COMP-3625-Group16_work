@@ -22,30 +22,33 @@ train_data = combine_data.sample(frac=0.6, random_state=42)
 
 test_data = combine_data.drop(train_data.index)
 
+train_data_Y = train_data['claim'].map({'no_claim': 0, 'claim': 1}).to_numpy()
 
 print(combine_data)
 
 
 '''
 Pseudocode for the function to check claim probability
-
-- Split data into test and training sets
-- Break claims into two categories: 'claim' and 'no_claim'
-
-- Count the number of claims in each category and divide by 
-the total number of claims to get the probability of each category
 '''
 
-def check_claim_probability() -> float:
+'''
+    Calculate the weight of the claim category
+'''
+def calc_weight(w: np.array) -> float:
+
+    weight_length = len(w)
+    weights = train_data @ w[0:(weight_length-1)] + w[weight_length-1]
     
-    Y = train_data['claim'].map({'no_claim': 0, 'claim': 1}).to_numpy()
-    probability = Y['claim'] / len(Y)
+    return weights
+
+
+def check_claim_probability(w: np.array) -> float:
+    
+    weight = calc_weight(w)
+    probability = 1 / (1 + np.exp(-weight))
     
     return probability
 
-'''
-Need to calculate
-'''
 
     
 
