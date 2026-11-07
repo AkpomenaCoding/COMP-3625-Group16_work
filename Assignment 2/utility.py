@@ -27,3 +27,20 @@ def gives_utility_benefit(premium, p, C) -> bool:
 
     #returns if true if the customer would find it better to just pay our insurance
     return insured_utility > uninsured 
+
+def set_premium_price(p, C, markup):
+    expected_cost = p * C
+
+    #the price we want to offer
+    wanted_price = expected_cost * (1 + markup)
+
+    # guarding rail for the insurance
+    safe_cap = expected_cost + (0.95 * (max_premium(p, C) - expected_cost))
+    
+    #name can be ignored 
+    my_return = np.minimum(wanted_price, safe_cap)
+    return my_return
+
+#print(set_premium_price(0.1, 50000, 0.2))
+
+#print(gives_utility_benefit(set_premium_price(0.1, 50000, 0.2), 0.1, 50000))
