@@ -20,6 +20,10 @@ def max_premium(p, C):
     max_willing = inverse_utility(expected_utility_uninsured(p, C))
     return -max_willing
 
-def gives_utility_benefit(premium, p, C):
+def gives_utility_benefit(premium, p, C) -> bool:
     # this is for if the customer is better paying our insurance or not, would work on after work
-    return
+    insured_utility = utility(-premium)
+    uninsured = expected_utility_uninsured(p, C)
+
+    #returns if true if the customer would find it better to just pay our insurance
+    return insured_utility > uninsured 
