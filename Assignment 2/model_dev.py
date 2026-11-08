@@ -22,8 +22,8 @@ data = pd.concat([customer_data, customer_claims[["claim"]]], axis=1)
 
 def main():
 
-    X = data.drop(columns=["claim"]).to_numpy(dtype=float)
-    y = data["claim"].to_numpy(dtype=int)
+    X = data.drop(columns=["claim"]).to_numpy()
+    y = data["claim"].to_numpy()
 
     X_train, X_remaining, y_train, y_remaining = train_test_split(
         X,
