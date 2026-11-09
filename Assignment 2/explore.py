@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import log_loss, brier_score_loss
 from sklearn.ensemble import HistGradientBoostingClassifier
+from utility import set_premium_price
 import pandas as pd
 import numpy as np
 
@@ -96,3 +97,17 @@ print("----- Against Baseline ------")
 print(log_loss(y_test, new_y_baseline))
 print(brier_score_loss(y_test, new_y_baseline))
 """
+
+p = p_test
+coverage = x_test["coverage_amount"]
+premium = set_premium_price(p, coverage, 0.2)
+expected_profit = premium - p * coverage
+ratio = expected_profit/coverage
+
+cov = coverage.to_numpy()
+profit = expected_profit.to_numpy()
+order = np.argsort(-ratio.to_numpy())
+
+i = 0
+while(i < len(x_test)):
+    c = order[i]
