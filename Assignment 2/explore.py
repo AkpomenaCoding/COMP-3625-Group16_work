@@ -2,6 +2,7 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import log_loss, brier_score_loss
+from sklearn.ensemble import HistGradientBoostingClassifier
 import pandas as pd
 import numpy as np
 
@@ -36,15 +37,41 @@ print(y_train.mean(), y_val.mean(), y_test.mean())
 
 model = LogisticRegression(max_iter=1000)
 
+"""
 model.fit(x_train, y_train)
 p_val = model.predict_proba(x_val)[:,1]
 
-"""
 print(p_val[:5])
 print(p_val.min(), p_val.max(), p_val.mean())
 """
 
 y_baseline = np.full(len(y_val), y_train.mean())
 
-print(log_loss(y_val, p_val), log_loss(y_val, y_baseline))
+"""
+# log loss compares our how good our predicitons were, while brier the average of our errors in predicting it.,
+# the baseline is 0.335 which is the general average from my tests before. 
+# y_baseline is just array with the same length as y_val filled with the mean 0.335,
+# after log_loss comapres it seems that we're not to far off our baseline which I see as good. 
+print(log_loss(y_val, p_val), log_loss(y_val, y_baseline))  
 print(brier_score_loss(y_val, p_val), brier_score_loss(y_val, y_baseline))
+"""
+
+candidates = {
+    "logistic": LogisticRegression(max_iter=1000),
+    "boosting": HistGradientBoostingClassifier(random_state=0)
+}
+
+best_name = None
+best_score = np.inf
+
+for name, model in candidates.items():
+    model.fit(x_train, y_train)
+    p_val = model.predict_proba(x_val)[:,1]
+    curr_log_loss = log_loss(y_val, p_val)
+
+    if (curr_log_loss < best_score):
+        best_score = curr_log_loss
+        best_name = name
+    print(name, curr_log_loss)
+
+print("Best: ", best_name, best_score)
