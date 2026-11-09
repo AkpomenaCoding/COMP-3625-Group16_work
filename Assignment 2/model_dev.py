@@ -1,54 +1,82 @@
 from pathlib import Path
-
+from xml.parsers.expat import errors
+from sklearn.metrics import classification_report, confusion_matrix
 import pandas as pd
 import numpy as np
-
-'''
-This is linear regression model that predicts the probability '''
+import pickle
+from sklearn.model_selection import train_test_split
+from supervised_learning import LogisticRegression
+from feature_selection import feature_hill_climb
 
 BASE_DIR = Path(__file__).resolve().parent
 
 # load historical customer data
 customer_data = pd.read_csv(BASE_DIR / 'data' / 'customer_data.csv', index_col=None)
 customer_claims = pd.read_csv(BASE_DIR / 'data' / 'customer_claims.csv', index_col=None)
+data = pd.concat([customer_data, customer_claims[["claim"]]], axis=1)
+
 
 
 # write your code to develop your agent program here.
 # you can, of course, add additional .py files as needed.
 
-combine_data = pd.concat([customer_data, customer_claims],axis=1)
+def main():
 
-train_data = combine_data.sample(frac=0.6, random_state=42)
+    X = data.drop(columns=["claim"]).to_numpy()
+    y = data["claim"].to_numpy()
 
-test_data = combine_data.drop(train_data.index)
+    X_train, X_remaining, y_train, y_remaining = train_test_split(
+        X,
+        y,
+        test_size=0.3,
+        random_state=42,
+        stratify=y
+    )
 
-train_data_Y = train_data['claim'].map({'no_claim': 0, 'claim': 1}).to_numpy()
-
-print(combine_data)
-
-
-'''
-Pseudocode for the function to check claim probability
-'''
-
-'''
-    Calculate the weight of the claim category
-'''
-def calc_weight(w: np.array) -> float:
-
-    weight_length = len(w)
-    weights = train_data @ w[0:(weight_length-1)] + w[weight_length-1]
+    X_validation, X_test, y_validation, y_test = train_test_split(
+        X_remaining,
+        y_remaining,
+        test_size=0.50,
+        random_state=42,
+        stratify=y_remaining
+    )
     
-    return weights
+    model = LogisticRegression(
+        learning_rate=0.1,
+        iterations=1000,
+        regularization=0.01
+    )
+
+    print("\nSTARTING FEATURE SELECTION")
+    print("--------------------------")
+
+    selected_features, best_accuracy = feature_hill_climb(
+        X_train,
+        y_train,
+        X_validation,
+        y_validation
+    )
+
+    print("Training Logistic Regression...")
+
+    model.gradient_descent(X_train, y_train)
+
+    model_directory = BASE_DIR / "models"
+    model_directory.mkdir(exist_ok=True)
+
+    with open(model_directory / "logistic_model.pkl", "wb") as file:
+
+        pickle.dump({
+            "model": model,
+            "feature_columns": list(data.drop(columns=["claim"]).columns)
+        }, file)
+
+    print("Model successfully saved.")
+
+    with open(model_directory / "test_data.pkl", "wb") as file:
+
+        pickle.dump((X_test, y_test), file)
 
 
-def check_claim_probability(w: np.array) -> float:
-    
-    weight = calc_weight(w)
-    probability = 1 / (1 + np.exp(-weight))
-    
-    return probability
-
-
-    
-
+if __name__ == "__main__":
+    main()
