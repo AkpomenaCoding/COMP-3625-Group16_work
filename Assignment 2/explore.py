@@ -26,6 +26,7 @@ x_train, x_rest, y_train, y_rest = train_test_split(
     my_x, my_y, test_size=0.4, stratify=my_y, random_state=0
 )
 
+# splits the rest into half, 20% each
 x_val, x_test, y_val, y_test = train_test_split(
     x_rest, y_rest, test_size=0.5, stratify=y_rest, random_state=0
 )
@@ -58,7 +59,10 @@ print(brier_score_loss(y_val, p_val), brier_score_loss(y_val, y_baseline))
 
 candidates = {
     "logistic": LogisticRegression(max_iter=1000),
-    "boosting": HistGradientBoostingClassifier(random_state=0)
+    "boosting": HistGradientBoostingClassifier(random_state=0),
+    "boosting3": HistGradientBoostingClassifier(max_depth=3, learning_rate=0.05, random_state=0),
+    "boosting8": HistGradientBoostingClassifier(max_depth=8),
+    "boosting10": HistGradientBoostingClassifier(max_depth=10, learning_rate=0.1, random_state=0)
 }
 
 best_name = None
@@ -75,3 +79,20 @@ for name, model in candidates.items():
     print(name, curr_log_loss)
 
 print("Best: ", best_name, best_score)
+
+final_model = HistGradientBoostingClassifier(max_depth=8, random_state=0)
+
+final_model.fit(x_train, y_train)
+p_test = final_model.predict_proba(x_test)[:,1]
+
+"""
+print("----- Against P_test ------")
+print(log_loss(y_test, p_test))
+print(brier_score_loss(y_test, p_test))
+
+# this baseline is for the test set. 
+new_y_baseline = np.full(len(y_test), y_train.mean())
+print("----- Against Baseline ------")
+print(log_loss(y_test, new_y_baseline))
+print(brier_score_loss(y_test, new_y_baseline))
+"""
