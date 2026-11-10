@@ -41,7 +41,7 @@ def set_premium(customer_data: pd.DataFrame) -> pd.DataFrame:
     coverage = customer_data["coverage_amount"].to_numpy(dtype=float)
 
     # need to add premium selection function
-    premium = set_premium(p_claims, coverage, MARKUP)
+    premium = set_premium_price(p_claims, coverage, MARKUP)
     profit = premium - p_claims * coverage
 
     eligible = gives_utility_benefit(premium, p_claims, coverage)
