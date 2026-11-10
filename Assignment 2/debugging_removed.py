@@ -68,3 +68,8 @@ print("----- Against Baseline ------")
 print(log_loss(y_test, new_y_baseline))
 print(brier_score_loss(y_test, new_y_baseline))
 """
+
+"""
+print("Coverage shows, ", total)
+print("Expected profit, ", profit[desired_customer].sum())
+"""
