@@ -77,9 +77,11 @@ for name, model in candidates.items():
     if (curr_log_loss < best_score):
         best_score = curr_log_loss
         best_name = name
-    print(name, curr_log_loss)
+    # print(name, curr_log_loss)
 
+"""
 print("Best: ", best_name, best_score)
+"""
 
 final_model = HistGradientBoostingClassifier(max_depth=8, random_state=0)
 
@@ -106,62 +108,9 @@ ratio = expected_profit/coverage
 
 cov = coverage.to_numpy()
 profit = expected_profit.to_numpy()
-order = np.argsort(-ratio.to_numpy())
 
-# change back to list after 
-chosen = np.zeros(len(cov), dtype=bool)
-total = 0
 BUDGET = 100000000
 
-i = 0
-while(i < len(x_test)):
-    c = order[i]
-    
-    if (total + cov[c]) <= BUDGET:
-        chosen[c] = True
-        total = total + cov[c]
 
-    i = i + 1
 
 total_profit = profit[chosen].sum()
-
-"""
-print("Number of customers chosen: ", len(chosen))
-print("Total: ", total)
-print("Sum of profits: ", total_profit)
-"""
-
-improved = True
-swaps = 0
-
-while improved:
-    improved = False
-
-    for j in range(len(cov)):
-        if not chosen[j]:
-            continue
-
-        best_k = -1
-
-        for k in range(len(cov)):
-            if chosen[k]:
-                continue
-            if total - cov[j] + cov[k] > BUDGET:
-                continue
-            if profit[k] <= profit[j]:
-                continue
-            if best_k == -1 or profit[k] > profit[best_k]:
-                best_k = k
-
-        if best_k != -1:
-            chosen[j] = False
-            chosen[best_k] = True
-            total = total - cov[j] + cov[best_k]
-            swaps += 1
-            improved = True
-
-"""
-print("Swaps: ", swaps)
-print("Total coverage: ", total)
-print("Total profit: ", profit[chosen].sum())
-"""
