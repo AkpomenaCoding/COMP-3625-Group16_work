@@ -44,7 +44,7 @@ def set_premium(customer_data: pd.DataFrame) -> pd.DataFrame:
     premium = set_premium_price(p_claims, coverage, MARKUP)
     profit = premium - p_claims * coverage
 
-    eligible = gives_utility_benefit(premium, p_claims, coverage)
+    eligible = gives_utility_benefit(premium, p_claims, coverage) & (profit > 0)
 
     desired_customer, total = greedy_select(coverage, profit, eligible, BUDGET)
     desired_customer, total, swaps = hill_climb(desired_customer, total, coverage, profit, eligible, BUDGET)
