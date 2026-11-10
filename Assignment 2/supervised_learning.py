@@ -85,7 +85,9 @@ class LogisticRegression:
 
             if (i + 1) % 100 == 0:
 
-                loss = self.cross_entropy_loss(y, predictions)
+                updated_predictions = self.check_claim_probability(X)
+                
+                loss = self.cross_entropy_loss(y, updated_predictions)
 
                 print(
                     f"Iteration {i + 1}/{self.iterations}, "
@@ -114,10 +116,11 @@ class LogisticRegression:
         predictions = []
 
         for probability in probabilities:
-            if probability[1] >= threshold:
+            if probability >= threshold:
                 predictions.append(1)
             else:
                 predictions.append(0)
 
         return predictions
-
+    
+    

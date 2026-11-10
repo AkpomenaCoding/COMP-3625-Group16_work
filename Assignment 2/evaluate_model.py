@@ -1,13 +1,11 @@
-
 from pathlib import Path
 import pickle
-
 from sklearn.metrics import (
     accuracy_score,
     confusion_matrix,
     classification_report,
     brier_score_loss,
-    log_loss
+    log_loss,
 )
 
 
@@ -26,10 +24,10 @@ def main():
         X_test, y_test = pickle.load(file)
 
     model = saved_data["model"]
-
+    threshold = saved_data["threshold"]
     probabilities = model.predict_probability(X_test)[:, 1]
-
-    predictions = model.predict(X_test, threshold=0.5)
+    
+    predictions = model.predict_class(X_test, threshold=threshold)
 
     print("\nMODEL EVALUATION")
     print("--------------------------")
