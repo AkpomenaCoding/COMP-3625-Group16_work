@@ -27,3 +27,5 @@ too much weight such as 'coverage_amount' and we also perfom ridge regularizatio
 
 Question 3:
 In this assignment scenario, which party is acting according to the principle of maximum expected utililty? The customer? Your program? Both?
+It's both because they use different utility functions, and the porgram only approximately maximises its expected utility. 
+It uses probabilities from the logistic regression, not the true ones, so it maximises expected utility under its beliefs.
