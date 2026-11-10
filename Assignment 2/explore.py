@@ -130,3 +130,38 @@ print("Number of customers chosen: ", len(chosen))
 print("Total: ", total)
 print("Sum of profits: ", total_profit)
 """
+
+improved = True
+swaps = 0
+
+while improved:
+    improved = False
+
+    for j in range(len(cov)):
+        if not chosen[j]:
+            continue
+
+        best_k = -1
+
+        for k in range(len(cov)):
+            if chosen[k]:
+                continue
+            if total - cov[j] + cov[k] > BUDGET:
+                continue
+            if profit[k] <= profit[j]:
+                continue
+            if best_k == -1 or profit[k] > profit[best_k]:
+                best_k = k
+
+        if best_k != -1:
+            chosen[j] = False
+            chosen[best_k] = True
+            total = total - cov[j] + cov[best_k]
+            swaps += 1
+            improved = True
+
+"""
+print("Swaps: ", swaps)
+print("Total coverage: ", total)
+print("Total profit: ", profit[chosen].sum())
+"""
