@@ -37,7 +37,7 @@ def set_premium_price(p, C, markup):
     # guarding rail for the insurance
     safe_cap = expected_cost + (0.95 * (max_premium(p, C) - expected_cost))
     
-    #name can be ignored 
+    # returns safe cap if our wanted price is lower 
     my_return = np.minimum(wanted_price, safe_cap)
     return my_return
 
