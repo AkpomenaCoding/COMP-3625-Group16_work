@@ -48,9 +48,6 @@ def set_premium(customer_data: pd.DataFrame) -> pd.DataFrame:
 
     desired_customer, total = greedy_select(coverage, profit, eligible, BUDGET)
     desired_customer, total, swaps = hill_climb(desired_customer, total, coverage, profit, eligible, BUDGET)
-
-    print("Coverage shows, ", total)
-    print("Expected profit, ", profit[desired_customer].sum())
     
     return pd.DataFrame({
         "p_claim": p_claims,
