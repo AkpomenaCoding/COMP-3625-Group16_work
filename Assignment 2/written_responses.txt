@@ -1,7 +1,9 @@
 Question 0:
 Report the line number(s) where your program performs utility calculations
 
-
+In model_evaluation.py:
+- 43
+- 47
 
 
 Question 1:

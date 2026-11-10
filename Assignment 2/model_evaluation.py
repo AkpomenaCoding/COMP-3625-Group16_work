@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from utility import set_premium_price, gives_utility_benefit
 from selection import hill_climb, greedy_select
-from matplotlib.path import Path
+from pathlib import Path
 import pickle
 
 BUDGET = 100_000_000
@@ -36,7 +36,7 @@ def set_premium(customer_data: pd.DataFrame) -> pd.DataFrame:
     """
     X = customer_data[feature_columns]
 
-    p_claims = model.predict_probability(customer_data)(X)[:, 1]
+    p_claims = model.predict_probability(X.to_numpy())[:, 1]
     # need to add utility selection function
     coverage = customer_data["coverage_amount"].to_numpy(dtype=float)
 

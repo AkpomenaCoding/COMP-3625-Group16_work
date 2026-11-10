@@ -49,5 +49,5 @@ def hill_climb(chosen, total, cov, profit, eligible, budget):
                 swaps += 1
                 improved = True
 
-        return chosen, total, swaps
+    return chosen, total, swaps
     # while testing with the intial data set provided, there was no good replacement with zero swaps.
