@@ -8,13 +8,18 @@ Question 1:
 The supervised learning model you used: report its accuracy, sensitivity, and specificity in predicting claims.
 Refer to specific line numbers where these things are measured.
 
-
-
+In evaluate_model.py lines:
+- 35
+- 40
+- 45
+- 51
+- 54
 
 
 Question 2:
 How confident are you that your model has not overfit the historical data? Why?
-
+We are 90% that our model does not overfit the historical data. The reason is because we normalize all the features so one doesn't hold
+too much weight such as 'coverage_amount' and we also perfom ridge regularization to penalize large weights.
 
 
 
