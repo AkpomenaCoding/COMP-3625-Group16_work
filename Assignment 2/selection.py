@@ -1,9 +1,6 @@
 import numpy as np
 
-BUDGET = 100_000_000
-MARKUP = 0.2 # example given from the assignment doc
-
-def greedys_select(cov, profit, eligible, budget):
+def greedy_select(cov, profit, eligible, budget):
     order = np.argsort(-(profit/cov))
     chosen = np.zeros(len(cov), dtype=bool)
     total = 0
@@ -17,6 +14,8 @@ def greedys_select(cov, profit, eligible, budget):
             total = total + cov[c]
 
         i = i + 1
+
+    return chosen, total
 
 def hill_climb(chosen, total, cov, profit, eligible, budget):
     improved = True
