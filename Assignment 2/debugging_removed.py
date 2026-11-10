@@ -40,6 +40,18 @@ candidates = {
 }
 """
 
+"""
+for name, model in candidates.items():
+    model.fit(x_train, y_train)
+    p_val = model.predict_proba(x_val)[:,1]
+    curr_log_loss = log_loss(y_val, p_val)
+
+    if (curr_log_loss < best_score):
+        best_score = curr_log_loss
+        best_name = name
+    # print(name, curr_log_loss)
+
+"""
 
 """
 print("Best: ", best_name, best_score)

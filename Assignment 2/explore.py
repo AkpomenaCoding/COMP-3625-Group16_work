@@ -34,19 +34,9 @@ y_baseline = np.full(len(y_val), y_train.mean())
 
 
 
-
 best_name = None
 best_score = np.inf
 
-for name, model in candidates.items():
-    model.fit(x_train, y_train)
-    p_val = model.predict_proba(x_val)[:,1]
-    curr_log_loss = log_loss(y_val, p_val)
-
-    if (curr_log_loss < best_score):
-        best_score = curr_log_loss
-        best_name = name
-    # print(name, curr_log_loss)
 
 final_model = HistGradientBoostingClassifier(max_depth=8, random_state=0)
 
