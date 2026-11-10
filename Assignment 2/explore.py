@@ -108,6 +108,25 @@ cov = coverage.to_numpy()
 profit = expected_profit.to_numpy()
 order = np.argsort(-ratio.to_numpy())
 
+# change back to list after 
+chosen = np.zeros(len(cov), dtype=bool)
+total = 0
+BUDGET = 100000000
+
 i = 0
 while(i < len(x_test)):
     c = order[i]
+    
+    if (total + cov[c]) <= BUDGET:
+        chosen[c] = True
+        total = total + cov[c]
+
+    i = i + 1
+
+total_profit = profit[chosen].sum()
+
+"""
+print("Number of customers chosen: ", len(chosen))
+print("Total: ", total)
+print("Sum of profits: ", total_profit)
+"""
