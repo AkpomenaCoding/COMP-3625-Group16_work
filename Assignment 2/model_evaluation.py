@@ -1,9 +1,22 @@
 import pandas as pd
 import numpy as np
 from utility import utility
+from matplotlib.path import Path
+import pickle
 
 
 
+BASE_DIR = Path(__file__).resolve().parent
+model_path = BASE_DIR / "models" / "logistic_model.pkl"
+
+with open(model_path, "rb") as file:
+        saved_data = pickle.load(file)
+        
+model = saved_data["model"]
+threshold = saved_data["threshold"]
+feature_columns = saved_data["feature_columns"]
+        
+        
 # At grading time, I will call the below function with a dataframe of new potential customers
 # The dataframe I pass in will have the same columns as customer_data.csv, but will not include any of the customers in customer_data.csv
 # You will not be given any of the historical customer data or claims data at grading time, 
@@ -19,3 +32,24 @@ def set_premium(customer_data: pd.DataFrame) -> pd.DataFrame:
             desired_customer:  a boolean column indicating which customers you want to take on
             premium:    the amount of the premium to charge each customer
     """
+    X = customer_data[feature_columns]
+    p_claims = model.predict_probability(customer_data)(X)[:, 1]
+    # need to add utility selection function
+    # need to add premium selection function
+    
+    return pd.DataFrame({
+        "p_claim": p_claims,
+        "desired_customer": desired_customer,
+        "premium": premium
+    })
+    
+
+# TESTING SET PREMIUM FUNCTION
+def main():
+    customer_data = pd.read_csv(BASE_DIR / 'data' / 'customer_data.csv', index_col=None)
+
+    result_df = set_premium(customer_data)
+
+    print(result_df)
+if __name__ == "__main__":
+    main()
